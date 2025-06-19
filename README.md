@@ -11,7 +11,7 @@ A modern, dark-themed Flask web application for managing and tracking items with
 - Animated particles background
 
 ## Technologies Used
-- Python 3 (Flask, WTForms, SQLAlchemy)
+- Python 3 (Flask, Flask-WTF, Flask-SQLAlchemy, WTForms)
 - Bootstrap 5
 - jQuery
 - Font Awesome
@@ -27,9 +27,16 @@ A modern, dark-themed Flask web application for managing and tracking items with
 2. **Create a virtual environment:**
    ```sh
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
    ```
 3. **Install dependencies:**
+   ```sh
+   pip install flask flask-wtf flask-sqlalchemy
+   ```
+   Or, if you have a `requirements.txt` file:
    ```sh
    pip install -r requirements.txt
    ```
@@ -54,3 +61,7 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ## License
 [MIT](LICENSE)
+
+---
+
+**Maintained by Piero.**
