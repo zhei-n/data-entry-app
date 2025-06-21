@@ -43,6 +43,8 @@ A modern, dark-themed Flask web application for managing and tracking items with
 4. **Run the app:**
    ```sh
    flask run
+   OR
+   python data_entry_app.py
    ```
    The app will be available at [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
