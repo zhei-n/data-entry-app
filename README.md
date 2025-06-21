@@ -21,7 +21,7 @@ A modern, dark-themed Flask web application for managing and tracking items with
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/yourusername/data-entry-app.git
+   git clone https://github.com/zhei-n/data-entry-app.git
    cd data-entry-app
    ```
 2. **Create a virtual environment:**
