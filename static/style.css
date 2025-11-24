@@ -217,46 +217,51 @@ body.dark-mode #notification {
     color: #fff;
 }
 
-/* Modal Styles */
-/* Remove legacy custom modal styles for #editModal (conflicts with Bootstrap) */
-/* #editModal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
+/* Modal Styles handled by Bootstrap; custom editModal overlay removed in favor of native Bootstrap modal */
+
+/* Modern search input and toolbar tweaks */
+.search-input .form-control {
+    min-width: 260px;
+    max-width: 420px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
-#editModal > div {
-    background: #fff;
-    padding: 20px 24px;
-    border-radius: 8px;
-    max-width: 400px;
-    margin: auto;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+.search-input .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
-#editModal h2 {
-    margin-top: 0;
-    color: #007bff;
+.search-input .btn-outline-secondary {
+    margin-left: 4px;
 }
-#editModal label {
-    margin-top: 8px;
+
+/* Make toolbar buttons pill-shaped and compact */
+.container .btn-sm {
+    border-radius: 999px;
+    padding: 6px 10px;
 }
-#editModal button[type="submit"] {
-    background: #007bff;
-    margin-right: 8px;
+
+/* File input label styling for import button */
+label[for="import-file"] {
+    cursor: pointer;
 }
-#editModal button[type="button"] {
-    background: #6c757d;
+
+/* Dark mode adjustments for toolbar */
+body.dark-mode .btn-outline-success,
+body.dark-mode .btn-outline-info,
+body.dark-mode .btn-outline-secondary {
+    color: #e0e0e0;
+    border-color: #444;
 }
-#editModal button[type="submit"]:hover {
-    background: #0056b3;
+
+@media (max-width: 800px) {
+    .search-input .form-control {
+        min-width: 140px;
+        max-width: 100%;
+    }
+    .container .btn-sm {
+        padding: 6px 8px;
+    }
 }
-#editModal button[type="button"]:hover {
-    background: #495057;
-} */
 
 /* Bootstrap modal dark mode polish */
 body.dark-mode .modal-content {

@@ -59,33 +59,33 @@
 </div>
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-            <h1 class="my-4">DATA ENTRY SYSTEM</h1>
-            <div class="d-flex gap-2 flex-wrap align-items-center">
-                <div class="d-flex gap-2 align-items-center">
-                <a href="/logout" class="btn btn-outline-danger"><i class="fa fa-sign-out-alt"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Add Item Button -->
-        <div class="mb-4">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                <i class="fa fa-plus"></i> Add Item
-            </button>
+            <h1 class="mb-0">DATA ENTRY SYSTEM</h1>
         </div>
         <!-- List of Items -->
         <h2>ITEMS</h2>
-        <div class="d-flex gap-2 align-items-center">
-            <form id="searchForm" class="d-flex align-items-center gap-2 mb-0" method="get" action="/">
-                    <input type="text" id="searchInput" name="q" class="form-control" placeholder="Search..." style="max-width:220px;" value="{{ search_query }}">
-                    <button type="submit" class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
-                    <button type="button" id="clearSearch" class="btn btn-outline-secondary" onclick="document.getElementById('searchInput').value='';document.getElementById('searchForm').submit();"><i class="fa fa-times"></i></button>
-            </form><br>
-                    <a href="/export" class="btn btn-success"><i class="fa fa-file-csv"></i> Export CSV</a>
-                    <form action="/import" method="POST" enctype="multipart/form-data" class="d-flex align-items-center gap-2 mb-0" style="display:inline;">
-                        <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
-                        <input type="file" name="file" accept=".csv" required class="form-control form-control-sm" style="width:auto;max-width:260px;">
-                        <button type="submit" class="btn btn-info"><i class="fa fa-upload"></i> Import CSV</button>
-                    </form>
+        <div class="d-flex gap-2 align-items-center justify-content-between flex-wrap mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <form id="searchForm" class="mb-0 search-input" method="get" action="/">
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="searchInput" name="q" class="form-control" placeholder="Search items, brand, model..." value="{{ search_query }}">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                        <button type="button" id="clearSearch" class="btn btn-outline-secondary" title="Clear search"><i class="fa fa-times"></i></button>
+                    </div>
+                </form>
+                <a href="/export" class="btn btn-outline-success btn-sm"><i class="fa fa-file-csv"></i></a>
+                <form action="/import" method="POST" enctype="multipart/form-data" class="d-flex align-items-center gap-2 mb-0">
+                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                    <label class="btn btn-outline-info btn-sm mb-0" for="import-file" title="Import CSV"><i class="fa fa-upload"></i></label>
+                    <input id="import-file" type="file" name="file" accept=".csv" required class="d-none">
+                    <button type="submit" class="btn btn-info btn-sm">Import</button>
+                </form>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <i class="fa fa-plus"></i> Add Item
+                </button>
+                <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="fa fa-sign-out-alt"></i></a>
+            </div>
         </div>
         <form id="bulk-delete-form" method="POST" action="/bulk_delete">
         <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
@@ -149,61 +149,6 @@
         {% if not items %}
             <div class="empty-state">No items found. Add your first item above!</div>
         {% endif %}
-        <!-- Edit Modal -->
-        <div id="editModal" class="modal" tabindex="-1" style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Item</h5>
-                <button type="button" class="btn-close" id="closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm" autocomplete="off">
-                    <input type="hidden" name="id" id="edit-id">
-                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label for="edit-name" class="form-label">Item Name</label>
-                            <input type="text" name="name" id="edit-name" class="form-control mb-2" required autocomplete="off">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit-brand" class="form-label">Item Brand</label>
-                            <input type="text" name="brand" id="edit-brand" class="form-control mb-2" required autocomplete="off">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit-location" class="form-label">Location</label>
-                            <input type="text" name="location" id="edit-location" class="form-control mb-2" required autocomplete="off">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit-serial_number" class="form-label">Serial No.</label>
-                            <input type="text" name="serial_number" id="edit-serial_number" class="form-control mb-2" required autocomplete="off">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit-owner" class="form-label">Item Owner</label>
-                            <input type="text" name="owner" id="edit-owner" class="form-control mb-2" required autocomplete="off">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit-model" class="form-label">Item Model</label>
-                            <input type="text" name="model" id="edit-model" class="form-control mb-2" required autocomplete="off">
-                        </div>
-                        <div class="col-md-12">
-                            <label for="edit-status" class="form-label">Item Status</label>
-                            <select name="status" id="edit-status" class="form-select mb-2" required autocomplete="off">
-                                <option value="Working">Working</option>
-                                <option value="Defective">Defective</option>
-                                <option value="Under Maintenance">Under Maintenance</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mt-3 d-flex gap-2 justify-content-end">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
         <!-- Notification pop up -->
         <div id="notification" style="display:none;position:fixed;top:20px;right:20px;z-index:1000;padding:16px 24px;background:#28a745;color:#fff;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:1.1em;min-width:180px;text-align:center;transition:opacity 0.3s;opacity:0;">
             <span id="notification-message"></span>
@@ -221,12 +166,67 @@
           {% endif %}
         {% endwith %}
     </div>
+    <!-- Edit Modal (moved outside container for correct stacking) -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" autocomplete="off">
+                        <input type="hidden" name="id" id="edit-id">
+                        <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label for="edit-name" class="form-label">Item Name</label>
+                                <input type="text" name="name" id="edit-name" class="form-control mb-2" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-brand" class="form-label">Item Brand</label>
+                                <input type="text" name="brand" id="edit-brand" class="form-control mb-2" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-model" class="form-label">Item Model</label>
+                                <input type="text" name="model" id="edit-model" class="form-control mb-2" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-location" class="form-label">Location</label>
+                                <input type="text" name="location" id="edit-location" class="form-control mb-2" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-serial_number" class="form-label">Serial No.</label>
+                                <input type="text" name="serial_number" id="edit-serial_number" class="form-control mb-2" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-owner" class="form-label">Item Owner</label>
+                                <input type="text" name="owner" id="edit-owner" class="form-control mb-2" required autocomplete="off">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="edit-status" class="form-label">Item Status</label>
+                                <select name="status" id="edit-status" class="form-select mb-2" required autocomplete="off">
+                                    <option value="Working">Working</option>
+                                    <option value="Defective">Defective</option>
+                                    <option value="Under Maintenance">Under Maintenance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex gap-2 justify-content-end">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- jQuery (required for app.js) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/static/app.js"></script>
     <!-- Bootstrap JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="/static/app.js"></script>
     <script>
     // Ensure clear search button works reliably and resets URL
     document.addEventListener('DOMContentLoaded', function() {

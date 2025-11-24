@@ -47,10 +47,15 @@ document.getElementById('itemForm').addEventListener('submit', function(e) {
     });
 });
 document.getElementById('itemTable').addEventListener('click', function(e) {
-    if (e.target.classList.contains('delete-btn')) {
+    // Use closest() so clicks on icons inside buttons still count
+    const deleteBtn = e.target.closest('.delete-btn');
+    const editBtn = e.target.closest('.edit-btn');
+    const viewBtn = e.target.closest('.view-item-btn');
+
+    if (deleteBtn) {
         if (!confirm('Are you sure you want to delete this item?')) return;
         ajaxWithLoading(async () => {
-            const id = e.target.getAttribute('data-id');
+            const id = deleteBtn.getAttribute('data-id');
             const csrfToken = $("input[name='csrf_token']").val();
             const response = await fetch(`/delete/${id}`, {
                 method: 'POST',
@@ -65,7 +70,7 @@ document.getElementById('itemTable').addEventListener('click', function(e) {
                     data = null;
                 }
                 if (data && data.success) {
-                    const row = e.target.closest('tr');
+                    const row = deleteBtn.closest('tr');
                     row.parentNode.removeChild(row);
                     showNotification('Item deleted!', '#ffc107');
                 } else {
@@ -76,8 +81,9 @@ document.getElementById('itemTable').addEventListener('click', function(e) {
             }
         });
     }
-    if (e.target.classList.contains('edit-btn')) {
-        const row = e.target.closest('tr');
+
+    if (editBtn) {
+        const row = editBtn.closest('tr');
         document.getElementById('edit-id').value = row.getAttribute('data-id');
         document.getElementById('edit-name').value = row.children[1]?.textContent || '';
         document.getElementById('edit-brand').value = row.children[2]?.textContent || '';
@@ -86,10 +92,18 @@ document.getElementById('itemTable').addEventListener('click', function(e) {
         document.getElementById('edit-serial_number').value = row.children[5]?.textContent || '';
         document.getElementById('edit-owner').value = row.children[6]?.textContent || '';
         document.getElementById('edit-status').value = row.children[7]?.querySelector('.status-badge')?.textContent.trim() || '';
-        document.getElementById('editModal').style.display = 'flex';
+        // Show the Bootstrap modal
+        const editModalEl = document.getElementById('editModal');
+        if (typeof bootstrap !== 'undefined' && editModalEl) {
+            const modal = bootstrap.Modal.getOrCreateInstance(editModalEl);
+            modal.show();
+        } else if (editModalEl) {
+            editModalEl.style.display = 'flex';
+        }
     }
-    if (e.target.classList.contains('view-item-btn')) {
-        const itemId = e.target.getAttribute('data-item-id');
+
+    if (viewBtn) {
+        const itemId = viewBtn.getAttribute('data-item-id');
         ajaxWithLoading(() => {
             const detailContent = document.getElementById('item-detail-content');
             detailContent.innerHTML = '<div class="text-center py-4"><div class="spinner-border" role="status"></div></div>';
@@ -112,12 +126,11 @@ document.getElementById('itemTable').addEventListener('click', function(e) {
                     detailContent.innerHTML = '<div class="alert alert-danger">Error loading item details.</div>';
                 });
         });
-        document.getElementById('itemDetailModal').style.display = 'flex';
+        const detailModal = document.getElementById('itemDetailModal');
+        if (detailModal) detailModal.style.display = 'flex';
     }
 });
-document.getElementById('closeModal').onclick = function() {
-    document.getElementById('editModal').style.display = 'none';
-};
+// Close handler removed; Bootstrap's data-bs-dismiss handles modal close.
 document.getElementById('editForm').addEventListener('submit', function(e) {
     e.preventDefault();
     ajaxWithLoading(async () => {
@@ -147,7 +160,13 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
             for (let i = 1; i < newRows.length; i++) {
                 table.appendChild(newRows[i].cloneNode(true));
             }
-            document.getElementById('editModal').style.display = 'none';
+            // Hide the Bootstrap modal after successful update
+            const editModalEl = document.getElementById('editModal');
+            if (typeof bootstrap !== 'undefined' && editModalEl) {
+                bootstrap.Modal.getOrCreateInstance(editModalEl).hide();
+            } else if (editModalEl) {
+                editModalEl.style.display = 'none';
+            }
             showNotification('Item updated!');
         } else {
             showNotification('Failed to update item.', '#dc3545');
@@ -156,7 +175,12 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
 });
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        document.getElementById('editModal').style.display = 'none';
+        const editModalEl = document.getElementById('editModal');
+        if (typeof bootstrap !== 'undefined' && editModalEl) {
+            bootstrap.Modal.getOrCreateInstance(editModalEl).hide();
+        } else if (editModalEl) {
+            editModalEl.style.display = 'none';
+        }
     }
 });
 // Dark mode toggle

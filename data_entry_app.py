@@ -3,8 +3,8 @@ from flask_wtf.csrf import CSRFProtect
 import csv
 from io import StringIO
 from functools import wraps
-from models import db, Item, ItemForm
-from forms import LoginForm
+from models import db, Item
+from forms import LoginForm, ItemForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db'
