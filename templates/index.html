@@ -59,33 +59,61 @@
 </div>
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-            <h1 class="mb-0">DATA ENTRY SYSTEM</h1>
+            <h1 class="mb-0">Data Entry</h1>
         </div>
         <!-- List of Items -->
-        <h2>ITEMS</h2>
-        <div class="d-flex gap-2 align-items-center justify-content-between flex-wrap mb-3">
-            <div class="d-flex align-items-center gap-2">
-                <form id="searchForm" class="mb-0 search-input" method="get" action="/">
-                    <div class="input-group input-group-sm">
-                        <input type="text" id="searchInput" name="q" class="form-control" placeholder="Search items, brand, model..." value="{{ search_query }}">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                        <button type="button" id="clearSearch" class="btn btn-outline-secondary" title="Clear search"><i class="fa fa-times"></i></button>
-                    </div>
-                </form>
-                <a href="/export" class="btn btn-outline-success btn-sm"><i class="fa fa-file-csv"></i></a>
-                <form action="/import" method="POST" enctype="multipart/form-data" class="d-flex align-items-center gap-2 mb-0">
-                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
-                    <label class="btn btn-outline-info btn-sm mb-0" for="import-file" title="Import CSV"><i class="fa fa-upload"></i></label>
-                    <input id="import-file" type="file" name="file" accept=".csv" required class="d-none">
-                    <button type="submit" class="btn btn-info btn-sm">Import</button>
-                </form>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                    <i class="fa fa-plus"></i> Add Item
+        <h3>Items</h3>
+        <!-- Improved Toolbar with proper alignment -->
+<div class="toolbar-container mb-3">
+    <div class="toolbar-left">
+        <!-- Search Form -->
+        <form id="searchForm" class="search-form" method="get" action="/">
+            <div class="input-group input-group-sm">
+                <input type="text" id="searchInput" name="q" class="form-control" 
+                       placeholder="Search items, brand, model..." 
+                       value="{{ search_query }}">
+                <button type="submit" class="btn btn-primary" title="Search">
+                    <i class="fa fa-search"></i>
                 </button>
-                <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="fa fa-sign-out-alt"></i></a>
+                <button type="button" id="clearSearch" class="btn btn-outline-secondary" 
+                        title="Clear search">
+                    <i class="fa fa-times"></i>
+                </button>
             </div>
+        </form>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <!-- Export Button -->
+            <a href="/export" class="btn btn-outline-success btn-sm" title="Export to CSV">
+                <i class="fa fa-file-csv"></i>
+            </a>
+            
+            <!-- Import Button -->
+            <form action="/import" method="POST" enctype="multipart/form-data" 
+                  class="import-form" id="importForm">
+                <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                <label class="btn btn-outline-info btn-sm mb-0" for="import-file" title="Import CSV">
+                    <i class="fa fa-upload"></i>
+                </label>
+                <input id="import-file" type="file" name="file" accept=".csv" class="d-none">
+            </form>
+        </div>
+    </div>
+    
+    <div class="toolbar-right">
+        <!-- Add Item Button -->
+        <button type="button" class="btn btn-primary btn-sm" 
+                data-bs-toggle="modal" data-bs-target="#addItemModal">
+            <i class="fa fa-plus"></i> <span class="btn-text">Add Item</span>
+        </button>
+        
+        <!-- Logout Button -->
+        <a href="/logout" class="btn btn-outline-danger btn-sm" title="Logout">
+            <i class="fa fa-sign-out-alt"></i> <span class="btn-text">Logout</span>
+        </a>
+    </div>
+</div>
         </div>
         <form id="bulk-delete-form" method="POST" action="/bulk_delete">
         <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
@@ -258,5 +286,16 @@
     });
     // Majority of the code here is work by my fam AI Thanks mate
     </script>
+    <script>
+// Auto-submit import form when file is selected
+document.getElementById('import-file').addEventListener('change', function(e) {
+    if (this.files.length > 0) {
+        // Show loading indicator
+        document.getElementById('loading').style.display = 'flex';
+        // Submit the form
+        document.getElementById('importForm').submit();
+    }
+});
+</script>
 </body>
 </html>
